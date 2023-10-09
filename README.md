@@ -8,7 +8,7 @@ e.g.
  - Get output code and paste it into processor
 
 ## VS code extension
-(will be later)
+[Link to extension repository](https://github.com/Redik2/MSPY-snippets)
 
-## Setup launch.json for VS code
+## Guide how setup launch.json for VS code
 (will be later)
