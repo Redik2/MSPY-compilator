@@ -1,0 +1,9 @@
+i = 0
+test_array[cell1]
+while (i < 64)
+{
+  write = i ** 2
+  test_array[i] = write
+  i = i + 1
+}
+utils.end()

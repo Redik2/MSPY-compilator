@@ -1,0 +1,14 @@
+func bindAndMove
+{
+  unit.bind(type)
+  unit.move(@thisx, @thisy)
+}
+while (true)
+{
+  type = @flare
+  bindAndMove()
+  type = @horizon
+  bindAndMove()
+  type = @zenith
+  bindAndMove()
+}

@@ -1,0 +1,10 @@
+while (true) {
+  unit.bind(@zenith)
+  c = arc1.controlled
+  if (c != 0) {
+    x = arc1.shootX
+    y = arc1.shootY
+    unit.move(x, y)
+    unit.target(x, y, 1)
+  }
+}

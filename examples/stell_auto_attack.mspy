@@ -1,0 +1,42 @@
+func moveAndShoot
+{
+  unit.autoPathfind()
+  unit.target(x, y, 1)
+}
+func stopAndShoot
+{
+  unit.idle()
+  unit.target(x, y, 1)
+}
+
+unit.bind(@stell)
+x, y, f, b = unit.locateBuilding(turret, true)
+n = unit.within(x, y, 19)
+if (n)
+{
+  stopAndShoot()
+  utils.end()
+}
+x, y, f, b = unit.locateBuilding(generator, true)
+n = unit.within(x, y, 19)
+if (n)
+{
+  moveAndShoot()
+  utils.end()
+}
+x, y, f, b = unit.locateBuilding(core, true)
+n = unit.within(x, y, 19)
+if (n)
+{
+  moveAndShoot()
+  utils.end()
+}
+x, y, f, b = unit.locateBuilding(factory, true)
+n = unit.within(x, y, 19)
+if (n)
+{
+  moveAndShoot()
+  utils.end()
+}
+unit.autoPathfind()
+utils.end()

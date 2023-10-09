@@ -1,0 +1,10 @@
+while (true) {
+  unit.bind(@flare)
+  n = unit.within(@thisx, @thisy, 10)
+  if (n) {
+    unit.idle()
+  }
+  else {
+    unit.move(@thisx, @thisy)
+  }
+}
