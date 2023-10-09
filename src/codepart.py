@@ -176,7 +176,7 @@ def pre_compile(lines) -> list[CodePart]:
 		line = Parser.line_precompile(lines[line_i])
 		if line.startswith("func"):
 			parsed = Parser.parseFunc(lines, line_i)
-			name = line[line.index("func") + 5:]
+			name = line[4:]
 			parts.append(Func(parsed, name))
 			line_i += len(parsed)
 		elif line.startswith("while"):
