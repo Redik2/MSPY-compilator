@@ -51,11 +51,12 @@ class Compilator:
 		return self.compressing()
 
 	def prepare_lines(self) -> str:
-		pre_script = list(open(self.fp, "r").read())
+		with open(self.fp, "r") as file:
+			pre_script = list(file.read())
 		script = []
 		script_i = -1
 		for i in range(len(pre_script)):
-			if i != " ":
+			if pre_script[i] != " ":
 				script.append(pre_script[i])
 				script_i += 1
 			if pre_script[i] in ["{", "}"] and pre_script[i - 1] != "\n":
@@ -126,7 +127,7 @@ class Compilator:
 		self.lines = compiled_lines
 
 if __name__ == '__main__':
-	path = "test.mspy"
+	path = "C:\Py.projects\MSPY_compilator\\test.mspy"
 	compilator = Compilator(path)
 	compiled = compilator.compile()
 	print("-------------------------OUTPUT-------------------------")

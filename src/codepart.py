@@ -370,7 +370,7 @@ def pre_compile(lines) -> list[CodePart]:
 				parts.append(ArrayWrite(line))
 			else:
 				parts.append(Equate(line))
-		elif line.endswith("()"):
+		elif line.endswith("()") and "." not in line:
 			parts.append(CallFunc(line))
 		elif line.find("[") != -1:
 			parts.append(ArraySetName(line))

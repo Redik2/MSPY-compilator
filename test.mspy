@@ -1,17 +1,6 @@
-testArray[cell1]
-while (true){
-  unit.bind(@flare)
-  x = testArray[0]
-  s = arc1.shootX
-  x = x * 2
-  a = block.sensor(arc1, shootX)
-  a = a ** 2
-  testArray[0] = s
-  unit.move(x, @thisy)
-  enm = block.radar(enemy, any, any, distance, hail1, 0)
-  x, y, f, b = unit.locateDamaged()
-  x, y, f, b = unit.locateSpawn()
-  x, y, f, b = unit.locateOre(@lead)
-  x, y, f, b = unit.locateBuilding(generator, true)
-  b = 5555598
+while(1){
+    unit.bind(@flare)
+    n = unit.within(@thisx, @thisy, 20)
+    if (n){unit.idle()}
+    else{unit.move(@thisx, @thisy)}
 }
