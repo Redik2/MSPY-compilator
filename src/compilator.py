@@ -40,6 +40,7 @@ class Compilator:
 		self.lines = compiled_lines
 
 	def compile(self) -> str:
+		print("\n".join(self.lines))
 		self.pre_compile()
 		self.getCache()
 		self.compileLines()
@@ -56,15 +57,16 @@ class Compilator:
 		script = []
 		script_i = -1
 		for i in range(len(pre_script)):
-			if pre_script[i] != " ":
+			if not pre_script[i].isspace() or pre_script[i] in ["\n"]:
 				script.append(pre_script[i])
 				script_i += 1
-			if pre_script[i] in ["{", "}"] and pre_script[i - 1] != "\n":
+			if pre_script[i] in ["{", "}"] and script[script_i - 1] != "\n":
+				print(pre_script[i - 1] + "'            aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
 				script.insert(script_i, "\n")
 				script_i += 1
 			if i == len(pre_script) - 1:
 				continue
-			if pre_script[i] in ["{", "}"] and pre_script[i + 1] != "\n" and pre_script[i + 1] not in ["{", "}"]:
+			if pre_script[i] in ["{", "}"] and pre_script[i + 1] != "\n":
 				script.append("\n")
 				script_i += 1
 

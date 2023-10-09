@@ -7,11 +7,15 @@ class Parser:
 		line_i = func_line
 		opened = 0
 		lines_in = []
+		print("AAAAAAAAAAAAAAAAAAAAAAAA")
+		print(lines)
 		while line_i < len(lines):
 			line_i += 1
 			line = Parser.line_precompile(lines[line_i])
+			print(line)
 			opened += line.startswith("{") - line.endswith("}")
 			if opened == 0:
+				print("BBBBBBBBBBBBBBBBBBBBBBB")
 				return lines_in
 			else:
 				lines_in.append(line)

@@ -1,169 +1,6 @@
 import enum
 from parser import Parser
-
-sensors = ["copper",
-		  "lead",
-		  "metaglass",
-		  "graphite",
-		  "sand",
-		  "coal",
-		  "titanium",
-		  "thorium",
-		  "scrap",
-		  "silicon",
-		  "plastanium",
-		  "phase-fabric",
-		  "surge-alloy",
-		  "spore-pod",
-		  "blast-compound",
-		  "pyratite",
-		  "beryllium",
-		  "tungsten",
-		  "oxide",
-		  "carbide",
-		  "water",
-		  "slag",
-		  "oil",
-		  "cryofluid",
-		  "neoplasm",
-		  "arkycite",
-		  "ozone",
-		  "hydrogen",
-		  "nitrogen",
-		  "cyanogen",
-		  "totalItems",
-		  "firstItem",
-		  "totalLiquids",
-		  "totalPower",
-		  "itemCapacity",
-		  "liquidCapacity",
-		  "powerCapacity",
-		  "powerNetStored",
-		  "powerNetCapacity",
-		  "powerNetIn",
-		  "powerNetOut",
-		  "ammo",
-		  "ammoCapacity",
-		  "health",
-		  "maxHealth",
-		  "heat",
-		  "shield",
-		  "efficiency",
-		  "progress",
-		  "timescale",
-		  "rotation",
-		  "x",
-		  "y",
-		  "shootX",
-		  "shootY",
-		  "size",
-		  "dead",
-		  "range",
-		  "shooting",
-		  "boosting",
-		  "mineX",
-		  "mineY",
-		  "mining",
-		  "speed",
-		  "team",
-		  "type",
-		  "flag",
-		  "controlled",
-		  "controller",
-		  "name",
-		  "payloadCount",
-		  "payloadType",
-		  "id",
-		  "enabled",
-		  "config",
-		  "color"]
-
-
-defaultLibs = {
-			   "memory":
-			   {
-				   "write": ["var", "building", "index"],
-				   "read": ["var", "building", "index"]
-			   },
-
-
-			   "draw":
-			   {
-					"flush": ["building"],
-			   		"clear": ["r", "g", "b"],
-			   		"color": ["r", "g", "b", "a"],
-			   		"col": ["color"],
-			   		"stroke": ["width"],
-			   		"line": ["x1", "y1", "x2", "y2"],
-			   		"rect": ["x", "y", "width", "height"],
-			   		"lineRect": ["x", "y", "width", "height"],
-			   		"poly": ["x", "y", "sides", "radius", "rotation"],
-			   		"linePoly": ["x", "y", "sides", "radius", "rotation"],
-			   		"triangle": ["x1", "y1", "x2", "y2", "x3", "y3"],
-			   		"image": ["x", "y", "image", "size", "rotation"]
-			   },
-
-			  "print":
-			   {
-				   "flush": ["building"],
-					"add": ["text"]
-			   },
-
-			  "block":
-			   {
-					"enabled": ["building", "mode"],
-					"shoot": ["building", "x", "y", "mode"],
-					"shootp": ["building", "unit", "mode"],
-					"config": ["building", "config"],
-					"color": ["building", "col"],
-					"sensor": ["var", "building", "type"],
-					"radar": ["filter1", "filter2", "filter3", "sortType", "building", "sortMode", "var"],
-					"getlink": ["var", "index"]
-			   },
-
-			  "utils":
-
-			   {
-					"wait": ["sec"],
-					"stop": [],
-					"end": []
-			   },
-
-			  "unit":
-			   {
-					"bind": ["unitType"],
-					"move": ["x", "y"],
-					"idle": [],
-					"stop": [],
-					"autoPathfind": [],
-					"unbind": [],
-					"approach": ["x", "y", "radius"],
-					"pathfind": ["x", "y"],
-					"boost": ["mode"],
-					"target": ["x", "y", "mode"],
-					"targetp": ["unit", "mode"],
-					"itemDrop": ["building", "amount"],
-					"itemTake": ["building", "itemType", "amount"],
-					"payDrop": [],
-					"payTake": ["mode"],
-					"payEnter": [],
-					"mine": ["x", "y"],
-					"flag": ["value"],
-					"build": ["x", "y", "block", "rotation", "config"],
-					"getBlock": ["x", "y", "varType", "varBuilding", "varFloor"],
-					"within": ["x", "y", "radius", "var"],
-					"radar": ["filter1", "filter2", "filter3", "sortType", "sortMode", "var"],
-					"locateBuilding": ["group", "enemy", "varX", "varY", "varFound", "varBuilding"],
-					"locateOre": ["ore", "varX", "varY", "varFound"],
-					"locateSpawn": ["varX", "varY", "varFound", "varBuilding"],
-					"locateDamaged": ["varX", "varY", "varFound", "varBuilding"]
-			   },
-
-			  "math":
-			   {
-
-			   }
-}
+from constants import sensors, defaultLibs
 
 
 def getMindustryMethod(lib, method):
@@ -346,19 +183,27 @@ def pre_compile(lines) -> list[CodePart]:
 			parsed = Parser.parseFunc(lines, line_i)
 			parts.append(While(parsed, Parser.parse_args(line)[0]))
 			line_i += len(parsed)
-			print("\n".join(parsed))
 		elif line.startswith("if"):
 			parsed = Parser.parseFunc(lines, line_i)
+			print(parsed)
 			if_ = If(parsed, Parser.parse_args(line)[0])
 			line_i += len(parsed)
-			try:
-				if lines[line_i + 2].find('else') != -1:
-					line_i += 2
+			add = 2
+			opened = 0
+			while line_i + add < len(lines) and opened == 0:
+				print(lines[line_i + add])
+				if "{" in lines[line_i + add]:
+					opened += 1
+				if "}" in lines[line_i + add]:
+					opened -= 1
+				if lines[line_i + add].find('else') != -1:
+					line_i += add
 					parsed = Parser.parseFunc(lines, line_i)
 					if_.else_ = Else(parsed)
 					line_i += len(parsed)
-			except IndexError:
-				pass
+					break
+				add += 1
+
 			parts.append(if_)
 			print("\n".join(parsed))
 		elif line.startswith("else"):
@@ -401,27 +246,27 @@ class Equate(CodePart):
 		self.line = line
 
 		def operation_test(line):
-			for i in line.split("=")[1]:
-				if i in ["+", "-", "*", "/", "%"]:
+			for i in line.split("=", 1)[1]:
+				if i in ["+", "-", "*", "/", "%", "=", "|", "&", "!"]:
 					return True
 			return False
 
 
-		if line.split("=")[1].find(".") != -1 and line.split("=")[1].split(".")[1] in sensors and not line.split("=")[1].split(".")[1].endswith(")"):
+		if line.split("=", 1)[1].find(".") != -1 and line.split("=", 1)[1].split(".")[1] in sensors and not line.split("=", 1)[1].split(".")[1].endswith(")"):
 			self.type = "sensor"
-			self.obj = line.split("=")[1].split(".")[0]
-			self.find = line.split("=")[1].split(".")[1]
-		elif line.split("=")[1].find(".") != -1 and line.split("=")[1].split(".")[0] in list(defaultLibs.keys()):
+			self.obj = line.split("=", 1)[1].split(".")[0]
+			self.find = line.split("=", 1)[1].split(".")[1]
+		elif line.split("=")[1].find(".") != -1 and line.split("=", 1)[1].split(".")[0] in list(defaultLibs.keys()):
 			self.type = "method"
-			self.lib = line.split("=")[1].split(".")[0]
-			self.method = line.split("=")[1].split(".")[1][:line.split("=")[1].split(".")[1].index("(")]
+			self.lib = line.split("=", 1)[1].split(".")[0]
+			self.method = line.split("=", 1)[1].split(".")[1][:line.split("=", 1)[1].split(".")[1].index("(")]
 		elif operation_test(line):
 			self.type = "operation"
 			self.operation = ""
-			for i in line.split("=")[1]:
-				if i in ["+", "-", "*", "/", "%"]:
+			for i in line.split("=", 1)[1]:
+				if i in ["+", "-", "*", "/", "%", "=", "|", "&", "!"]:
 					self.operation += i
-			self.values = line.split("=")[1].split(self.operation)
+			self.values = line.split("=", 1)[1].split(self.operation)
 		else:
 			self.type = "set"
 			self.value = line.split("=")[1]
@@ -449,6 +294,14 @@ class Equate(CodePart):
 						return [f"op mod {self.vars[0]} {self.values[0]} {self.values[1]}"]
 					case "**":
 						return [f"op pow {self.vars[0]} {self.values[0]} {self.values[1]}"]
+					case "==":
+						return [f"op equal {self.vars[0]} {self.values[0]} {self.values[1]}"]
+					case "!=":
+						return [f"op notEqual {self.vars[0]} {self.values[0]} {self.values[1]}"]
+					case "&&":
+						return [f"op land {self.vars[0]} {self.values[0]} {self.values[1]}"]
+					case "||":
+						return [f"op or {self.vars[0]} {self.values[0]} {self.values[1]}"]
 			case "set":
 				return [f"set {self.vars[0]} {self.value}"]
 
@@ -594,7 +447,7 @@ class SingleLine(CodePart):
 		self.line = line
 
 	def compile(self) -> list[str]:
-		if self.line in ["{", "}"]: return []
+		if self.line.replace(" ", "") in ["{", "}", ""]: return []
 		if self.line.find("(") == -1: return [self.line + " / invalid"]
 		args = Parser.parse_args(self.line)
 

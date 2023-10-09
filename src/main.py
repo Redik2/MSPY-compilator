@@ -1,6 +1,7 @@
 from compilator import Compilator
 import sys
 
+
 if __name__ == '__main__':
 	path = str(sys.argv[1])
 	comp = Compilator(path)
