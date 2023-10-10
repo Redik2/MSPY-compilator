@@ -129,7 +129,7 @@ class Compilator:
 		self.lines = compiled_lines
 
 if __name__ == '__main__':
-	path = "C:\Py.projects\MSPY_compilator\examples\\func_example.mspy"
+	path = "C:\Py.projects\MSPY_compilator\\test.mspy"
 	compilator = Compilator(path)
 	compiled = compilator.compile()
 	print("-------------------------OUTPUT-------------------------")

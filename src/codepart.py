@@ -346,6 +346,11 @@ class While(MultiCodePart):
 			compiled = [f"jump {len(super().compile()) + 2} {Parser.revers_condition(true_condition)} {compared_vars[0]} {compared_vars[1]}"]
 		compiled += super().compile()
 		compiled += [f"jump -{len(super().compile()) + 1} always"]
+		for line_i in range(len(compiled)):
+			if compiled[line_i] == "break":
+				compiled[line_i] = f"jump {len(super().compile()) + 2 - line_i} always"
+			elif compiled[line_i] == "continue":
+				compiled[line_i] = f"jump -{line_i} always"
 
 		return compiled
 
@@ -448,6 +453,10 @@ class SingleLine(CodePart):
 
 	def compile(self) -> list[str]:
 		if self.line.replace(" ", "") in ["{", "}", ""]: return []
+		if self.line.replace(" ", "") == "return": return ["set @counter return"]
+		if self.line.replace(" ", "") == "break": return ["break"]
+		if self.line.replace(" ", "") == "continue": return ["continue"]
+
 		if self.line.find("(") == -1: return [self.line + " / invalid"]
 		args = Parser.parse_args(self.line)
 
